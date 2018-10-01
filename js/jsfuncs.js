@@ -819,7 +819,7 @@ function searchGame() {
 	function getFBGNGames(){
 	console.log("getting games from FBGN");
 	var userName = $('#users-name').val();
-	var siteUrl = 'https://jose.cs.herts.ac.uk/af16acf/public/GetRecs?UserName=' + userName;
+	var siteUrl = 'http://fbgn.gearhostpreview.com/GetRecs?UserName=' + userName;
 	console.log(siteUrl);
 	//fields are empty error popup
 	if (!$.trim($('#users-name').val())) 
