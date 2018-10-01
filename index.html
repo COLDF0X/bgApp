@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Multipage template - Test App</title>
+        <link rel="stylesheet" href="jquery.mobile-1.4.5.min.css" />
+		<link rel="stylesheet" href="MyBGapp.min.css" />
+        <script src="js/jquery-2.1.4.min.js"></script>
+        <script src="js/jquery.mobile-1.4.5.min.js"></script>
+		<script src="js/jsfuncs.js"></script>
+		<script src="js/jstorage.js"></script>
+		<script type="text/javascript" src="js/Camera.js"></script>
+		<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+		<script>
+		$(document).ready(function(){
+			//alternate icons
+			$('body').addClass('ui-alt-icon');
+			//sets max length for number fields attribute
+			maxNumLength();
+			//set some functions to buttons
+			setButtFunks();
+			//goes to mainmenu after 5 seconds if still on start page
+			srtPgTimer();
+		});
+		</script>
+
+		<style>
+		body {
+		background: url(images/bg_image.png);
+		}
+		.ui-page {
+		background: transparent;
+		}
+
+		.wrap {
+		white-space: normal !important;
+		font-size:medium !important;
+		}
+		</style>
+    </head>
+	
+<body class="container" onload="load()">
+
+<!---------------------- Start Page ---------------------->
+<div data-role="page" id="start-page" data-title="Main Menu" data-theme="b">
+<div data-role="content" style="text-align: center;">
+<br /><br /><br /><br />
+<div class="ui-corner-all ui-body ui-body-c">
+<h1>My Board Game Mobile App</h1>
+</div></div>
+</div>
+<!---------------------- Main Menu ---------------------->
+
+    <div data-role="page" id="main-menu" data-title="Main Menu" data-theme="b">
+        <div data-role="header">
+			<h1>Main Menu</h1>
+			<a href="#options-dialog" data-icon="gear" class="ui-btn-right" data-theme="a">Options</a>
+        </div>
+		<br />
+        <div data-role="content">
+			<div data-role="controlgroup">
+				<a href="#find-game" class="ui-btn ui-corner-all ui-btn-icon-top ui-icon-search ui-nodisc-icon">Quick-Find A Game To Play</a>
+				<a href="#show-games" id="search" class="ui-btn ui-corner-all ui-btn-icon-top ui-icon-eye ui-nodisc-icon">View All Games List</a>
+				<a href="#add-new" class="ui-btn ui-corner-all ui-btn-icon-top ui-icon-plus ui-nodisc-icon">Add a Game</a>
+				<a href="#del-game" id="delGame" class="ui-btn ui-corner-all ui-btn-icon-top ui-icon-delete ui-nodisc-icon">Delete A Game</a>
+				<a href="#edit-games" onclick"cancelEdit();" id="edtGame" class="ui-btn ui-corner-all ui-btn-icon-top ui-icon-edit ui-nodisc-icon">Edit a Game</a>
+				<a href="#fbgn-page" class="ui-btn ui-corner-all ui-btn-icon-top ui-icon-action ui-nodisc-icon">Add your FBGN Games</a>
+			</div>
+        </div>
+		<br />
+        <div data-role="footer">
+            Copyright 2018
+        </div>
+    </div>
+
+<!---------------------- Add New Game Page ---------------------->
+
+    <div data-role="page" id="add-new" data-title="Add New Game" data-theme="b">
+        <div data-role="header">
+			<a onclick="clearFormData()" href="#main-menu" data-icon="home" class="ui-btn-left" data-theme="a">Home</a>
+			<h1>Add New Game</h1>
+			<a href="#options-dialog" data-icon="gear" class="ui-btn-right" data-theme="a">Options</a>
+        </div>
+        <div data-role="content">
+			<p>Please fill in your game's details and click submit.</p><br />
+			<div data-role="popup" id="popUp1" data-position-to="window" data-transition="turn">
+			<p></p></div>
+
+			<label for="game-name">Board Game Name:<span style="color:red">*</span></label>
+			<input onfocus="addTxtEvtLis('game-name')" type="text" required name="game-name" data-clear-btn="true" id="game-name" value="" maxlength="100"><br />
+
+			<label for="game-time">Game Length (min) e.g. 120:<span style="color:red">*</span></label>
+			<input onfocus="addTxtEvtLis('game-time')" type="number" required name="game-time" data-clear-btn="true" pattern="[0-9]*" id="game-time" value="" maxlength="3"><br />
+
+			<label for="selectMin" class="select">Minimum number of players:<span style="color:red">*</span></label>
+			<select name="selectMin" id="selectMin" data-mini="true" data-inline="true">
+				<option data-placeholder="true"></option>
+				<option value="1">1</option>
+    			<option value="2">2</option>
+    			<option value="3">3</option>
+    			<option value="4">4</option>
+    			<option value="5">5</option>
+    			<option value="6">6</option>
+			</select>
+
+			<label for="selectMax" class="select">Maximum number of players<span style="color:red">*</span></label>
+			<select name="selectMax" id="selectMax" data-mini="true" data-inline="true">
+				<option data-placeholder="true"></option>
+				<option value="1">1</option>
+    			<option value="2">2</option>
+    			<option value="3">3</option>
+    			<option value="4">4</option>
+    			<option value="5">5</option>
+    			<option value="6">6</option>
+    			<option value="7">7</option>
+    			<option value="8">8</option>
+			</select>
+			<br />
+			<br />
+			<!-- <a href="#pic-page" id="addPicBtn" class="ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-left">Add Pic For This Game</a> -->
+			<p style="text-align:right">
+			<button class="ui-btn ui-btn-inline ui-icon-check ui-btn-icon-left" id="addGameSave">Submit</button>
+			</p>
+			<ul id="outputul"></ul>
+        </div>
+        <div data-role="footer">
+            Copyright 2018
+        </div>
+    </div>
+
+<!---------------------- Find A Game Page ---------------------->
+
+    <div data-role="page" id="find-game" data-title="Find Game" data-theme="b">
+        <div data-role="header">
+			<a href="#main-menu" data-icon="home" class="ui-btn-left" data-theme="a">Home</a>
+			<h1>Find A Game</h1>
+			<a href="#options-dialog" data-icon="gear" class="ui-btn-right" data-theme="a">Options</a>
+        </div>
+        <div data-role="content">
+			<p>Please fill in the fields below and click search.</p><br /><br />
+			<label for="free-time">Ammount of free time (min) e.g. 120:</label>
+			<input type="number" onfocus="addTxtEvtLis('free-time')" data-clear-btn="true" name="number" pattern="[0-9]*" id="free-time" value="" maxlength="3"><br />
+
+			<label for="select-players" class="select">Number of players:</label>
+			<select name="select-choice-mini" id="select-players" data-mini="true" data-inline="true">
+				<option data-placeholder="true"></option>
+				<option value="1">1</option>
+    			<option value="2">2</option>
+    			<option value="3">3</option>
+    			<option value="4">4</option>
+    			<option value="5">5</option>
+    			<option value="6">6</option>    
+				<option value="7">7</option>
+    			<option value="8">8</option>
+			</select>
+
+			<div data-role="popup" id="popUp2" data-position-to="window" data-transition="turn"><p></p></div>
+
+			<p style="text-align:right">
+			<button class="ui-btn ui-btn-inline ui-icon-search ui-btn-icon-left" id="gameFind">Search</button>
+			</p>
+		<br />
+		<p id="srhTxt"></p><br />
+		<ul data-role="listview" id="lstVwSrch">
+		</ul>
+
+        </div>
+
+        <div data-role="footer">
+            Copyright 2018
+        </div>
+    </div>
+
+<!-------------------------- Options Menu -------------------------->
+
+	<div data-role="page" id="options-dialog" data-title="options-dialog" data-dialog="true" data-theme="b">
+        <div data-role="header" style="overflow:hidden;">
+            <h1>Options</h1>
+        </div>
+        <div data-role="content">
+		<div style="text-align: center;">
+			<button class="ui-btn ui-btn-inline ui-corner-all ui-icon-info ui-btn-icon-left ui-nodisc-icon" id="helpBtn">Help & Info</button>
+			<button class="ui-btn ui-btn-inline ui-corner-all ui-icon-star ui-btn-icon-left ui-nodisc-icon" onclick="happyDaysMode(true)" id="HpyMod">Happy Mode</button>
+			<button class="ui-btn ui-btn-inline ui-corner-all ui-icon-delete ui-btn-icon-left ui-nodisc-icon ui-btn-c" id="deleteAllBtn">Delete All Games</button>
+			<button class="ui-btn ui-btn-inline ui-corner-all ui-icon-action ui-btn-icon-left ui-nodisc-icon" id="demoBtn">Add Demo Games</button>
+			<button class="ui-btn ui-btn-inline ui-corner-all ui-icon-minus ui-btn-icon-left ui-nodisc-icon" id="dupBtn">Remove Duplicate Games</button>
+		<div data-role="popup" id="opPop" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;">
+		</div>
+        </div>
+    </div></div>
+
+<!---------------------- Delete A Games Page ---------------------->
+
+	<div data-role="page" id="del-game" data-theme="b">
+		<div data-role="header">
+			<a href="#main-menu" data-icon="home" class="ui-btn-left" data-theme="a">Home</a>
+			<h1>Delete A Game</h1>
+			<a href="#options-dialog" data-icon="gear" class="ui-btn-right" data-theme="a">Options</a>
+        </div>
+        <div data-role="content">    
+			<p>Search for games to delete by their name and then click the red icon to delete:</p>
+			<form class="ui-filterable">
+			<input id="auto-input-2" data-type="search" placeholder="Search games by name...">
+			</form><br />
+            <ul data-role="listview" id="listview1" data-split-icon="delete" data-split-theme="c" data-inset="true" data-filter="true" data-filter-reveal="true" data-input="#auto-input-2">
+            </ul>
+			<div data-role="popup" id="del-gamepop" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;">
+			</div>
+        </div>
+		<div data-role="footer">
+            Copyright 2018
+        </div>
+    </div>
+
+<!---------------------- Edit Games Page ---------------------->
+
+	<div data-role="page" id="edit-games" data-theme="b">
+		<div data-role="header">
+			<a onclick="cancelEdit()" data-icon="home" class="ui-btn-left" href="#main-menu" data-theme="a">Home</a>
+			<h1>Edit Games</h1>
+			<a href="#options-dialog" data-icon="gear" class="ui-btn-right" data-theme="a">Options</a>
+        </div>
+        <div data-role="content">    
+		<div id="editBlock" style="display: none;">
+		<label for="edt-g-name">Board Game Name:<span style="color:red">*</span></label>
+			<input type="text" onfocus="addTxtEvtLis('edt-g-name')" data-clear-btn="true" required name="edt-g-name" id="edt-g-name" value="" maxlength="100"><br />
+
+			<label for="edt-g-time">Game Length (min) e.g. 120:<span style="color:red">*</span></label>
+			<input type="number" onfocus="addTxtEvtLis('edt-g-time')" data-clear-btn="true" required name="edt-g-time" pattern="[0-9]*" id="edt-g-time" value="" maxlength="3"><br />
+
+			<label for="selEdtMin" class="select">Minimum number of players:<span style="color:red">*</span></label>
+			<select name="selEdtMin" id="selEdtMin" data-mini="true" data-inline="true">
+				<option data-placeholder="true"></option>
+				<option value="1">1</option>
+    			<option value="2">2</option>
+    			<option value="3">3</option>
+    			<option value="4">4</option>
+    			<option value="5">5</option>
+    			<option value="6">6</option>
+			</select>
+
+			<label for="selEdtMax" class="select">Maximum number of players<span style="color:red">*</span></label>
+			<select name="selEdtMax" id="selEdtMax" data-mini="true" data-inline="true">
+				<option data-placeholder="true"></option>
+				<option value="1">1</option>
+    			<option value="2">2</option>
+    			<option value="3">3</option>
+    			<option value="4">4</option>
+    			<option value="5">5</option>
+    			<option value="6">6</option>
+    			<option value="7">7</option>
+    			<option value="8">8</option>
+			</select>
+			<p style="text-align:center;">
+			<button class="ui-btn ui-btn-inline ui-icon-check ui-btn-icon-left" id="editSave">Save Edit</button>
+			<button class="ui-btn ui-btn-inline ui-icon-delete ui-btn-icon-left" id="editCancel">Cancel</button>
+			<a href="#pic-page" class="ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-left" id="btnAddPicEd">Add or Remove A Picture</a>
+			</p>
+		</div>
+		<p id="para1">Search for games to edit by their name and then click the grey icon to edit:</p>
+		<form class="ui-filterable" id="frm1">
+			<input id="auto-input-1" data-type="search" placeholder="Search games by name...">
+		</form><br />
+		<ul data-role="listview" id="editList" data-split-icon="edit" data-split-theme="a" data-inset="true" data-filter="true" data-filter-reveal="true" data-input="#auto-input-1">
+		</ul>
+		<div data-role="popup" id="editPop" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;"></div>
+        </div>
+		<div data-role="footer">
+            Copyright 2018
+        </div>
+    </div>
+
+<!---------------------- View All Games Page ---------------------->
+
+	<div data-role="page" id="show-games" data-theme="b">
+		<div data-role="header">
+			<a href="#main-menu" data-icon="home" class="ui-btn-left" data-theme="a">Home</a>
+			<h1>View All Games</h1>
+			<a href="#options-dialog" data-icon="gear" class="ui-btn-right" data-theme="a">Options</a>
+        </div>
+        <div data-role="content">
+		<br/>
+		<p>Filter games by their name:</p>
+		<form class="ui-filterable">
+			<input id="autocomplete-input" data-type="search" placeholder="Enter game name...">
+		</form><br /><br />
+            <ul data-role="listview" id="listSearch"  data-filter="true" data-filter-reveal="false" data-input="#autocomplete-input">
+            </ul>
+			<br />
+			<div data-role="popup" id="srch-gamepop" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;">
+			</div>
+        </div>
+		<div data-role="footer">
+            Copyright 2018
+        </div>
+    </div>
+
+<!---------------------- Add FBGN Games Page ---------------------->
+
+    <div data-role="page" id="fbgn-page" data-title="Add FBGN Games" data-theme="b">
+        <div data-role="header">
+			<a href="#main-menu" data-icon="home" class="ui-btn-left" data-theme="a">Home</a>
+			<h1>Add FBGN Games</h1>
+			<a href="#options-dialog" data-icon="gear" class="ui-btn-right" data-theme="a">Options</a>
+        </div>
+        <div data-role="content">
+			<div data-role="popup" id="popUpFBGN" data-position-to="window" data-transition="turn" style="max-width:300px;"></div>
+			<p>Type in your username to add games from your FBGN recommendations list 
+			or even add your favourate users recommendations by entering their username.</p>
+			<p><b>please note an internet connection is required for this process</b></p>
+			<br />
+			<label for="users-name">Username:<span style="color:red">*</span></label>
+			<input type="text" required name="users-name" id="users-name" value="" maxlength="100"><br />
+			<p style="text-align:right">
+			<button class="ui-btn ui-btn-inline ui-icon-action ui-nodisc-icon ui-btn-icon-left" id="fbgnAdd">Get Games</button>
+			</p>
+		<br />
+        </div>
+        <div data-role="footer">
+            Copyright 2018
+        </div>
+    </div>
+
+<!---------------------- Add Picture Page ---------------------->
+	<div data-role="page" id="pic-page" data-title="Add An Image For Your Game" data-dialog="true" data-theme="b">
+		<div data-role="header">
+			<h1>Add, Change Or Remove The Picture For Your Game</h1>
+        </div>
+		<div data-role="content">
+			<div style="text-align: center;">
+				<button class="ui-btn ui-btn-inline" onclick="capturePhotoWithFile();">Capture Photo</button> <br />
+				<button class="ui-btn ui-btn-inline" onclick="capturePhotoWithFileEdit();">Capture Then Edit Photo</button><br />
+				<!-- <button class="ui-btn ui-btn-inline" onclick="getPhoto();">Get A Picture From Phone's Album</button><br /> -->
+				<button class="ui-btn ui-btn-inline" onclick="delGamePic();">Remove A Picture From This Game</button><br />
+				<img style="display:none;width:100px;height:100px;margin-left: auto;margin-right: auto;" id="smallImage" src="" />
+			</div>
+			<div id="savPicBlk" style="display: none;">
+				<a href="javascript:savGamePic()" class="ui-shadow ui-btn ui-corner-all ui-btn-b ui-icon-check ui-btn-icon-left ui-btn-inline ui-mini ui-nodisc-icon ui-btn-a" id="savPicBtn">Save</a>
+				<a href="#" data-rel="back" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-b" onclick="hideSmIm()">Cancel</a>
+			</div>
+			<div data-role="popup" id="popUpPic" data-theme="a" data-overlay-theme="b" class="ui-content" style="max-width:340px; padding-bottom:2em;">
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>
